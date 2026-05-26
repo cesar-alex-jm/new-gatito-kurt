@@ -1,0 +1,91 @@
+* {
+  font-size: 1rem;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background-image: url('/Stadium.png');
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  min-height: 100vh;
+}
+
+button:hover {
+  transform: translateY(-2px) scale(1.02);
+
+  box-shadow: 0 0 20px rgba(100,221,23,0.5);
+}
+
+.status {
+  margin-top: 20px;
+
+  min-height: 30px;
+
+  font-size: 1.2rem;
+
+  color: #b7ffcb;
+}
+
+.cat-section {
+  position: relative;
+
+  margin-top: 30px;
+}
+
+.cat {
+  width: 8vw;
+  max-width: 90px;
+  min-width: 40px;
+  height: auto;
+}
+
+.bubble {
+  position: absolute;
+
+  top: -90px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  min-width: 220px;
+
+  padding: 16px;
+
+  border-radius: 18px;
+
+  background: white;
+
+  color: #111;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+
+  animation: popIn 0.4s ease;
+}
+
+.bubble strong {
+  display: block;
+
+  margin-top: 8px;
+
+  font-size: 1.4rem;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.7);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}
