@@ -1,10 +1,88 @@
+import { useState, useRef } from "react";
 import './App.css'
-function App() {
+export default function App() {
+  const [option1, setOption1] = useState("");
+  const [option2, setOption2] = useState("");
+  const [status, setStatus] = useState("");
+  const [answer, setAnswer] = useState("");
+  const [showBubble, setShowBubble] = useState(false);
+
+  const intervalRef = useRef<number | null>(null);
+
+  function entscheide() {
+    if (!option1 || !option2) {
+      alert("Bitte beide Teams eingeben.");
+      return;
+    }
+
+    setShowBubble(false);
+
+    let dots = 0;
+
+    intervalRef.current = window.setInterval(() => {
+      dots = (dots + 1) % 4;
+      setStatus("Gatito Kuuuurt" + ".".repeat(dots));
+    }, 500);
+
+    const delay = Math.random() * 2 + 4;
+
+    setTimeout(() => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+
+      const result = Math.random() < 0.5 ? option1 : option2;
+
+      setStatus("");
+      setAnswer(result);
+      setShowBubble(true);
+    }, delay * 1000);
+  }
+
   return (
     <div className="app">
-      {/* dein Inhalt */}
+      <div className="overlay" />
+
+      <div className="card">
+        <h1>⚽ Gatito Kurt</h1>
+
+        <p className="subtitle">
+          Das Orakel der Meisterschaften
+        </p>
+
+        <div className="inputs">
+          <input
+            type="text"
+            placeholder="Team 1"
+            value={option1}
+            onChange={(e) => setOption1(e.target.value)}
+          />
+
+          <input
+            type="text"
+            placeholder="Team 2"
+            value={option2}
+            onChange={(e) => setOption2(e.target.value)}
+          />
+        </div>
+
+        <button onClick={entscheide}>Alea iacta est</button>
+
+        <div className="status">{status}</div>
+
+        <div className="cat-section">
+          <img
+            className="cat"
+            src="/el-gatito_kuuurt.jpg"
+            alt="Gatito Kurt"
+          />
+
+          {showBubble && (
+            <div className="bubble">
+              <small>⚽ Meisterschafts-Tipp</small>
+              <strong>{answer}</strong>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
-
-export default App;
