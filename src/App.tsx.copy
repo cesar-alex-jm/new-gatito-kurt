@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import "./App.css";
+import './App.css'
 
 export default function App() {
   const [option1, setOption1] = useState("");
@@ -12,14 +12,11 @@ export default function App() {
   const intervalRef = useRef<number | null>(null);
 
   function entscheide() {
-    if (animating) return;
-
     if (!option1 || !option2) {
       alert("Bitte beide Teams eingeben.");
       return;
     }
 
-    setAnimating(true);
     setShowBubble(false);
 
     let dots = 0;
@@ -39,7 +36,6 @@ export default function App() {
       setStatus("");
       setAnswer(result);
       setShowBubble(true);
-      setAnimating(false);
     }, delay * 1000);
   }
 
@@ -49,6 +45,7 @@ export default function App() {
 
       <div className="card">
         <h1>⚽ Gatito Kurt</h1>
+
         <p className="subtitle">Das Orakel der Meisterschaften</p>
 
         <div className="inputs">
@@ -67,15 +64,13 @@ export default function App() {
           />
         </div>
 
-        <button onClick={entscheide}>
-          Alea iacta est
-        </button>
+        <button onClick={entscheide}>Alea iacta est</button>
 
         <div className="status">{status}</div>
 
         <div className="cat-section">
           <img
-            className={`cat ${animating ? "cat-animating" : ""}`}
+            className={`cat ${animating ? 'cat-animating' : ''}`}
             src="/el-gatito_kuuurt.png"
             alt="Gatito Kurt"
           />

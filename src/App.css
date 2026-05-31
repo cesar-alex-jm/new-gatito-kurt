@@ -18,6 +18,66 @@ html, body {
   min-height: 100vh;
 }
 
+.app {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+
+.card {
+  position: relative;
+  width: min(100%, 550px);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 28px;
+  padding: 32px;
+  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.18);
+}
+
+.subtitle {
+  margin: 0 auto 24px;
+  max-width: 420px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.inputs {
+  display: grid;
+  gap: 16px;
+  margin: 0 auto 24px;
+}
+
+.inputs input {
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  border-radius: 16px;
+  padding: 14px 16px;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.95);
+  color: #111;
+}
+
+button {
+  width: 100%;
+  border: none;
+  border-radius: 18px;
+  padding: 14px 18px;
+  font-size: 1rem;
+  color: white;
+  background: #2b8a3e;
+  cursor: pointer;
+}
+
 button:hover {
   transform: translateY(-2px) scale(1.02);
 
@@ -41,12 +101,38 @@ button:hover {
 }
 
 .cat {
-  width: 8vw;
-  max-width: 90px;
-  min-width: 40px;
+  cursor:pointer;
+  background: transparent;
+  width: 24vw;
+  max-width: 300px;
+  min-width: 120px;
   height: auto;
 }
+.cat-animating {
+  animation: diceRoll 2s ease-in-out;
+}
 
+@keyframes diceRoll {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+
+  25% {
+    transform: rotate(180deg) scale(1.2);
+  }
+
+  50% {
+    transform: rotate(360deg) scale(0.8);
+  }
+
+  75% {
+    transform: rotate(540deg) scale(1.2);
+  }
+
+  100% {
+    transform: rotate(720deg) scale(1);
+  }
+}
 .bubble {
   position: absolute;
 
