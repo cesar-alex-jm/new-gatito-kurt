@@ -10,6 +10,8 @@ export default function App() {
   const [animating, setAnimating] = useState(false);
 
   const intervalRef = useRef<number | null>(null);
+  const diceAudioRef = useRef<HTMLAudioElement | null>(null);
+  const goalAudioRef = useRef<HTMLAudioElement | null>(null);
 
   function entscheide() {
     if (animating) return;
@@ -22,6 +24,13 @@ export default function App() {
     setAnimating(true);
     setShowBubble(false);
 
+    diceAudioRef.current?.pause();
+    if (diceAudioRef.current) {
+      diceAudioRef.current.currentTime = 0;
+      diceAudioRef.current.loop = true;
+      diceAudioRef.current.play().catch(() => {});
+    }
+
     let dots = 0;
 
     intervalRef.current = window.setInterval(() => {
@@ -33,8 +42,16 @@ export default function App() {
 
     setTimeout(() => {
       if (intervalRef.current) clearInterval(intervalRef.current);
+      diceAudioRef.current?.pause();
+      if (diceAudioRef.current) diceAudioRef.current.currentTime = 0;
 
       const result = Math.random() < 0.5 ? option1 : option2;
+
+      goalAudioRef.current?.pause();
+      if (goalAudioRef.current) {
+        goalAudioRef.current.currentTime = 0;
+        goalAudioRef.current.play().catch(() => {});
+      }
 
       setStatus("");
       setAnswer(result);
@@ -53,6 +70,10 @@ export default function App() {
     setAnswer("");
     setShowBubble(false);
     setAnimating(false);
+    diceAudioRef.current?.pause();
+    if (diceAudioRef.current) diceAudioRef.current.currentTime = 0;
+    goalAudioRef.current?.pause();
+    if (goalAudioRef.current) goalAudioRef.current.currentTime = 0;
   }
 
   return (
@@ -99,6 +120,9 @@ export default function App() {
             </div>
           )}
         </div>
+
+        <audio ref={diceAudioRef} src="/sounds/dice.mp3" />
+        <audio ref={goalAudioRef} src="/sounds/goal.mp3" />
       </div>
     </div>
   );
