@@ -39,8 +39,20 @@ export default function App() {
       setStatus("");
       setAnswer(result);
       setShowBubble(true);
-      setAnimating(false);
     }, delay * 1000);
+  }
+
+  function handleBubbleAnimationEnd() {
+    setAnimating(false);
+  }
+
+  function resetApp() {
+    setOption1("");
+    setOption2("");
+    setStatus("");
+    setAnswer("");
+    setShowBubble(false);
+    setAnimating(false);
   }
 
   return (
@@ -67,8 +79,8 @@ export default function App() {
           />
         </div>
 
-        <button onClick={entscheide}>
-          Alea iacta est
+        <button onClick={showBubble ? resetApp : entscheide} disabled={animating}>
+          {showBubble ? "Nochmal sipelen?" : "Alea iacta est"}
         </button>
 
         <div className="status">{status}</div>
@@ -81,7 +93,7 @@ export default function App() {
           />
 
           {showBubble && (
-            <div className="bubble">
+            <div className="bubble" onAnimationEnd={handleBubbleAnimationEnd}>
               <small>⚽ Meisterschafts-Tipp</small>
               <strong>{answer}</strong>
             </div>

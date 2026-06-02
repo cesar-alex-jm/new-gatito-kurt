@@ -84,6 +84,11 @@ button:hover {
   box-shadow: 0 0 20px rgba(100,221,23,0.5);
 }
 
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .status {
   margin-top: 20px;
 
@@ -109,7 +114,7 @@ button:hover {
   height: auto;
 }
 .cat-animating {
-  animation: diceRoll 2s ease-in-out;
+  animation: diceRoll 2s ease-in-out infinite;
 }
 
 @keyframes diceRoll {
