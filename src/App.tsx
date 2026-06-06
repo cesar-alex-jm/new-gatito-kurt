@@ -13,10 +13,13 @@ export default function App() {
   const diceAudioRef = useRef<HTMLAudioElement | null>(null);
   const goalAudioRef = useRef<HTMLAudioElement | null>(null);
 
-  function entscheide() {
+  function entscheide(team1?: string, team2?: string) {
     if (animating) return;
 
-    if (!option1 || !option2) {
+    const firstTeam = team1 ?? option1;
+    const secondTeam = team2 ?? option2;
+
+    if (!firstTeam || !secondTeam) {
       alert("Bitte beide Teams eingeben.");
       return;
     }
@@ -45,7 +48,7 @@ export default function App() {
       diceAudioRef.current?.pause();
       if (diceAudioRef.current) diceAudioRef.current.currentTime = 0;
 
-      const result = Math.random() < 0.5 ? option1 : option2;
+      const result = Math.random() < 0.5 ? firstTeam : secondTeam;
 
       goalAudioRef.current?.pause();
       if (goalAudioRef.current) {
@@ -59,6 +62,14 @@ export default function App() {
     }, delay * 1000);
   }
 
+  function spielHeute() {
+    if (animating) return;
+
+    setOption1("Deutschland");
+    setOption2("USA");
+
+    entscheide("Deutschland", "USA");
+  }
   function handleBubbleAnimationEnd() {
     setAnimating(false);
   }
@@ -100,9 +111,15 @@ export default function App() {
           />
         </div>
 
-        <button onClick={showBubble ? resetApp : entscheide} disabled={animating}>
-          {showBubble ? "Nochmal sipelen?" : "Alea iacta est"}
-        </button>
+        <div style={{ display: "grid", gap: "10px" }}>
+          <button onClick={showBubble ? resetApp : () => entscheide()} disabled={animating}>
+            {showBubble ? "Nochmal spielen?" : "Alea iacta est"}
+          </button>
+
+          <button onClick={spielHeute} disabled={animating}>
+            📅 Spiel heute
+          </button>
+        </div>
 
         <div className="status">{status}</div>
 
