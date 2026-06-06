@@ -12,8 +12,9 @@ export default function App() {
   const intervalRef = useRef<number | null>(null);
   const diceAudioRef = useRef<HTMLAudioElement | null>(null);
   const goalAudioRef = useRef<HTMLAudioElement | null>(null);
+  const ohhAudioRef = useRef<HTMLAudioElement | null>(null);
 
-  function entscheide(team1?: string, team2?: string) {
+  function entscheide(team1?: string, team2?: string, includeDraw = false) {
     if (animating) return;
 
     const firstTeam = team1 ?? option1;
@@ -48,12 +49,26 @@ export default function App() {
       diceAudioRef.current?.pause();
       if (diceAudioRef.current) diceAudioRef.current.currentTime = 0;
 
-      const result = Math.random() < 0.5 ? firstTeam : secondTeam;
+      const randomValue = Math.random();
+      const result = includeDraw
+        ? randomValue < 0.33
+          ? firstTeam
+          : randomValue < 0.66
+          ? secondTeam
+          : "Unentschieden"
+        : randomValue < 0.5
+        ? firstTeam
+        : secondTeam;
 
       goalAudioRef.current?.pause();
-      if (goalAudioRef.current) {
-        goalAudioRef.current.currentTime = 0;
-        goalAudioRef.current.play().catch(() => {});
+      if (goalAudioRef.current) goalAudioRef.current.currentTime = 0;
+      ohhAudioRef.current?.pause();
+      if (ohhAudioRef.current) ohhAudioRef.current.currentTime = 0;
+
+      if (result === "Unentschieden") {
+        ohhAudioRef.current?.play().catch(() => {});
+      } else {
+        goalAudioRef.current?.play().catch(() => {});
       }
 
       setStatus("");
@@ -68,7 +83,7 @@ export default function App() {
     setOption1("Deutschland");
     setOption2("USA");
 
-    entscheide("Deutschland", "USA");
+    entscheide("Deutschland", "USA", true);
   }
   function handleBubbleAnimationEnd() {
     setAnimating(false);
@@ -85,6 +100,8 @@ export default function App() {
     if (diceAudioRef.current) diceAudioRef.current.currentTime = 0;
     goalAudioRef.current?.pause();
     if (goalAudioRef.current) goalAudioRef.current.currentTime = 0;
+    ohhAudioRef.current?.pause();
+    if (ohhAudioRef.current) ohhAudioRef.current.currentTime = 0;
   }
 
   return (
@@ -140,6 +157,7 @@ export default function App() {
 
         <audio ref={diceAudioRef} src="/sounds/dice.mp3" />
         <audio ref={goalAudioRef} src="/sounds/goal.mp3" />
+        <audio ref={ohhAudioRef} src="/sounds/ohh.mp3" />
       </div>
     </div>
   );
