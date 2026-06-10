@@ -80,10 +80,10 @@ export default function App() {
   function spielHeute() {
     if (animating) return;
 
-    setOption1("Deutschland");
-    setOption2("USA");
+    setOption1("Mexiko");
+    setOption2("Südafrika");
 
-    entscheide("Deutschland", "USA", true);
+    entscheide("Mexiko", "Südafrika", true);
   }
   function handleBubbleAnimationEnd() {
     setAnimating(false);
