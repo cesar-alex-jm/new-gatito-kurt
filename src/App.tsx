@@ -99,17 +99,6 @@ export default function App() {
     }, delay * 1000);
   }
 
-<<<<<<< HEAD
-  function spielHeute() {
-    if (animating) return;
-
-    setOption1("Mexiko");
-    setOption2("Südafrika");
-
-    entscheide("Mexiko", "Südafrika", true);
-  }
-=======
->>>>>>> aac0d53 (new feature todaygames)
   function handleBubbleAnimationEnd() {
     setAnimating(false);
   }
