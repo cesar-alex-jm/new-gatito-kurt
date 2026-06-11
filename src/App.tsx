@@ -1,9 +1,16 @@
-import { useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
+
+type Match = {
+  date: string;
+  team1: string;
+  team2: string;
+};
 
 export default function App() {
   const [option1, setOption1] = useState("");
   const [option2, setOption2] = useState("");
+  const [todayMatches, setTodayMatches] = useState<Match[]>([]);
   const [status, setStatus] = useState("");
   const [answer, setAnswer] = useState("");
   const [showBubble, setShowBubble] = useState(false);
@@ -13,6 +20,21 @@ export default function App() {
   const diceAudioRef = useRef<HTMLAudioElement | null>(null);
   const goalAudioRef = useRef<HTMLAudioElement | null>(null);
   const ohhAudioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    async function loadMatches() {
+      const response = await fetch("/data/WM.json");
+      const data = await response.json();
+
+      const today = new Date().toISOString().split("T")[0];
+
+      const matches = data.matches.filter((m: Match) => m.date === today);
+
+      setTodayMatches(matches);
+    }
+
+    loadMatches();
+  }, []);
 
   function entscheide(team1?: string, team2?: string, includeDraw = false) {
     if (animating) return;
@@ -77,6 +99,7 @@ export default function App() {
     }, delay * 1000);
   }
 
+<<<<<<< HEAD
   function spielHeute() {
     if (animating) return;
 
@@ -85,6 +108,8 @@ export default function App() {
 
     entscheide("Mexiko", "Südafrika", true);
   }
+=======
+>>>>>>> aac0d53 (new feature todaygames)
   function handleBubbleAnimationEnd() {
     setAnimating(false);
   }
@@ -111,9 +136,11 @@ export default function App() {
       <div className="card">
         <h1>⚽ Gatito Kurt</h1>
         <p className="subtitle">Das Orakel der Meisterschaften</p>
+        <p className="section-title">Deine Optionen</p>
 
         <div className="inputs">
           <input
+            className="option-control"
             type="text"
             placeholder="Team 1"
             value={option1}
@@ -121,6 +148,7 @@ export default function App() {
           />
 
           <input
+            className="option-control"
             type="text"
             placeholder="Team 2"
             value={option2}
@@ -129,13 +157,30 @@ export default function App() {
         </div>
 
         <div style={{ display: "grid", gap: "10px" }}>
-          <button onClick={showBubble ? resetApp : () => entscheide()} disabled={animating}>
+          <button
+            className="option-control option-control-button"
+            onClick={showBubble ? resetApp : () => entscheide()}
+            disabled={animating}
+          >
             {showBubble ? "Nochmal spielen?" : "Alea iacta est"}
           </button>
+        </div>
 
-          <button onClick={spielHeute} disabled={animating}>
-            📅 Spiel heute
-          </button>
+        <p className="section-title section-title-matches">Heute Spiel</p>
+
+        <div className="today-matches">
+          {todayMatches.slice(0, 4).map((match, index) => (
+            <button
+              className="today-match-button"
+              key={index}
+              onClick={() => {
+                setOption1(match.team1);
+                setOption2(match.team2);
+              }}
+            >
+              {match.team1} - {match.team2}
+            </button>
+          ))}
         </div>
 
         <div className="status">{status}</div>

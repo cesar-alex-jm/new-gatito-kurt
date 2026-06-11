@@ -51,17 +51,33 @@ html, body {
   font-weight: 500;
 }
 
+.section-title {
+  margin: 0 0 16px;
+  color: #eafff1;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.section-title-matches {
+  margin-top: 18px;
+}
+
 .inputs {
   display: grid;
   gap: 16px;
   margin: 0 auto 24px;
 }
 
-.inputs input {
+.option-control {
   width: 100%;
+  min-height: 52px;
+  box-sizing: border-box;
+}
+
+.inputs input {
   border: 1px solid rgba(0, 0, 0, 0.14);
   border-radius: 16px;
-  padding: 14px 16px;
+  padding: 0 16px;
   font-size: 1rem;
   background: rgba(255, 255, 255, 0.95);
   color: #111;
@@ -71,17 +87,34 @@ button {
   width: 100%;
   border: none;
   border-radius: 18px;
-  padding: 14px 18px;
   font-size: 1rem;
   color: white;
   background: #2b8a3e;
   cursor: pointer;
 }
 
+.option-control-button {
+  padding: 0 18px;
+}
+
+.today-matches {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.today-match-button {
+  background: #74c69d;
+}
+
 button:hover {
   transform: translateY(-2px) scale(1.02);
 
   box-shadow: 0 0 20px rgba(100,221,23,0.5);
+}
+
+.today-match-button:hover {
+  box-shadow: 0 0 20px rgba(116, 198, 157, 0.45);
 }
 
 button:disabled {
