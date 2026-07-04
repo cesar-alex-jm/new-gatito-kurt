@@ -36,7 +36,7 @@ export default function App() {
     loadMatches();
   }, []);
 
-  function entscheide(team1?: string, team2?: string, includeDraw = false) {
+  function entscheide(team1?: string, team2?: string) {
     if (animating) return;
 
     const firstTeam = team1 ?? option1;
@@ -72,26 +72,14 @@ export default function App() {
       if (diceAudioRef.current) diceAudioRef.current.currentTime = 0;
 
       const randomValue = Math.random();
-      const result = includeDraw
-        ? randomValue < 0.33
-          ? firstTeam
-          : randomValue < 0.66
-          ? secondTeam
-          : "Unentschieden"
-        : randomValue < 0.5
-        ? firstTeam
-        : secondTeam;
+      const result = randomValue < 0.5 ? firstTeam : secondTeam;
 
       goalAudioRef.current?.pause();
       if (goalAudioRef.current) goalAudioRef.current.currentTime = 0;
       ohhAudioRef.current?.pause();
       if (ohhAudioRef.current) ohhAudioRef.current.currentTime = 0;
 
-      if (result === "Unentschieden") {
-        ohhAudioRef.current?.play().catch(() => {});
-      } else {
-        goalAudioRef.current?.play().catch(() => {});
-      }
+      goalAudioRef.current?.play().catch(() => {});
 
       setStatus("");
       setAnswer(result);
