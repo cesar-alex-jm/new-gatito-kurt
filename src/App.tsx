@@ -3,9 +3,45 @@ import "./App.css";
 
 type Match = {
   date: string;
+  time?: string;
   team1: string;
   team2: string;
 };
+
+function formatCETDate(dateValue: Date): string {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Berlin",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(dateValue);
+}
+
+function formatCETTime(dateValue: Date): string {
+  return new Intl.DateTimeFormat("de-DE", {
+    timeZone: "Europe/Berlin",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(dateValue);
+}
+
+function parseMatchToCETDateTime(match: Match): Date | null {
+  if (!match.time) return null;
+
+  const timeMatch = match.time.match(/(\d{1,2}):(\d{2})\s+UTC([+-])(\d{1,2})/i);
+  if (!timeMatch) return null;
+
+  const [, rawHours, rawMinutes, sign, offsetHours] = timeMatch;
+  const hours = Number(rawHours);
+  const minutes = Number(rawMinutes);
+  const offset = Number(offsetHours);
+  const offsetString = `${sign}${String(Math.abs(offset)).padStart(2, "0")}:00`;
+  const isoString = `${match.date}T${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:00${offsetString}`;
+  const parsedDate = new Date(isoString);
+
+  return Number.isNaN(parsedDate.getTime()) ? null : parsedDate;
+}
 
 export default function App() {
   const [option1, setOption1] = useState("");
@@ -26,9 +62,13 @@ export default function App() {
       const response = await fetch("/data/WM.json");
       const data = await response.json();
 
-      const today = new Date().toISOString().split("T")[0];
+      const today = formatCETDate(new Date());
 
-      const matches = data.matches.filter((m: Match) => m.date === today);
+      const matches = data.matches.filter((m: Match) => {
+        const matchDateTime = parseMatchToCETDateTime(m);
+        if (!matchDateTime) return false;
+        return formatCETDate(matchDateTime) === today;
+      });
 
       setTodayMatches(matches);
     }
@@ -146,18 +186,24 @@ export default function App() {
         <p className="section-title section-title-matches">Heute Spiel</p>
 
         <div className="today-matches">
-          {todayMatches.slice(0, 4).map((match, index) => (
-            <button
-              className="today-match-button"
-              key={index}
-              onClick={() => {
-                setOption1(match.team1);
-                setOption2(match.team2);
-              }}
-            >
-              {match.team1} - {match.team2}
-            </button>
-          ))}
+          {todayMatches.slice(0, 4).map((match, index) => {
+            const cetTime = parseMatchToCETDateTime(match);
+            const displayTime = cetTime ? `${formatCETTime(cetTime)} CET` : "";
+
+            return (
+              <button
+                className="today-match-button"
+                key={index}
+                onClick={() => {
+                  setOption1(match.team1);
+                  setOption2(match.team2);
+                }}
+              >
+                <span>{match.team1} - {match.team2}</span>
+                {displayTime ? <small>{displayTime}</small> : null}
+              </button>
+            );
+          })}
         </div>
 
         <div className="status">{status}</div>
