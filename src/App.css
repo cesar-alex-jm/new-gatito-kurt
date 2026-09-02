@@ -97,14 +97,12 @@ button {
   padding: 0 18px;
 }
 
-.today-matches {
-  display: grid;
-  gap: 8px;
-  margin-bottom: 18px;
-}
-
-.today-match-button {
-  background: #74c69d;
+.matches-disabled {
+  margin: 0 0 18px;
+  color: #eafff1;
+  font-size: 0.95rem;
+  font-weight: 500;
+  opacity: 0.9;
 }
 
 button:hover {
