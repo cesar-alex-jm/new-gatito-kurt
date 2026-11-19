@@ -127,9 +127,7 @@ export default function App() {
             </button>
           </div>
 
-          <p className="section-title section-title-matches">Heute Spielperiode ist beendet </p>
-          <p className="matches-disabled">Danke fürs Mitmachen. Nutze die manuellen Eingaben.</p>
-
+          
         </div>
 
         <div className="scene">
